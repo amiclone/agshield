@@ -1,0 +1,192 @@
+{
+  "experiment_date": "2026-07-17T14:51:18.527060",
+  "platform": "linux",
+  "python": "3.12.3",
+  "trials": [
+    {
+      "trial": 1,
+      "timestamp": "2026-07-17T14:51:21.040191",
+      "attack_duration_ms": 6.23,
+      "detection": {
+        "total_alerts": 28,
+        "critical_alerts": 4,
+        "warning_alerts": 4,
+        "info_alerts": 20,
+        "first_detection_latency_ms": 5.57,
+        "completeness_percent": 20.0,
+        "categories": {
+          "timestomp": false,
+          "wipe": false,
+          "deletion": false,
+          "wiper_rename": true,
+          "canary": false
+        },
+        "chain_alerts": 1
+      },
+      "evidence_preservation": {
+        "integrity": "VERIFIED",
+        "message": "All 28 entries verified"
+      },
+      "canary": {
+        "deployed": 3,
+        "compromised": 3
+      }
+    },
+    {
+      "trial": 2,
+      "timestamp": "2026-07-17T14:51:23.578550",
+      "attack_duration_ms": 5.59,
+      "detection": {
+        "total_alerts": 23,
+        "critical_alerts": 0,
+        "warning_alerts": 4,
+        "info_alerts": 19,
+        "first_detection_latency_ms": null,
+        "completeness_percent": 0.0,
+        "categories": {
+          "timestomp": false,
+          "wipe": false,
+          "deletion": false,
+          "wiper_rename": false,
+          "canary": false
+        },
+        "chain_alerts": 1
+      },
+      "evidence_preservation": {
+        "integrity": "VERIFIED",
+        "message": "All 23 entries verified"
+      },
+      "canary": {
+        "deployed": 3,
+        "compromised": 3
+      }
+    },
+    {
+      "trial": 3,
+      "timestamp": "2026-07-17T14:51:26.115030",
+      "attack_duration_ms": 7.42,
+      "detection": {
+        "total_alerts": 21,
+        "critical_alerts": 0,
+        "warning_alerts": 4,
+        "info_alerts": 17,
+        "first_detection_latency_ms": null,
+        "completeness_percent": 0.0,
+        "categories": {
+          "timestomp": false,
+          "wipe": false,
+          "deletion": false,
+          "wiper_rename": false,
+          "canary": false
+        },
+        "chain_alerts": 1
+      },
+      "evidence_preservation": {
+        "integrity": "VERIFIED",
+        "message": "All 21 entries verified"
+      },
+      "canary": {
+        "deployed": 3,
+        "compromised": 3
+      }
+    },
+    {
+      "trial": 4,
+      "timestamp": "2026-07-17T14:51:29.155361",
+      "attack_duration_ms": 463.52,
+      "detection": {
+        "total_alerts": 27,
+        "critical_alerts": 3,
+        "warning_alerts": 4,
+        "info_alerts": 20,
+        "first_detection_latency_ms": 429.18,
+        "completeness_percent": 20.0,
+        "categories": {
+          "timestomp": false,
+          "wipe": false,
+          "deletion": false,
+          "wiper_rename": true,
+          "canary": false
+        },
+        "chain_alerts": 1
+      },
+      "evidence_preservation": {
+        "integrity": "VERIFIED",
+        "message": "All 27 entries verified"
+      },
+      "canary": {
+        "deployed": 3,
+        "compromised": 3
+      }
+    },
+    {
+      "trial": 5,
+      "timestamp": "2026-07-17T14:51:31.745598",
+      "attack_duration_ms": 8.83,
+      "detection": {
+        "total_alerts": 19,
+        "critical_alerts": 0,
+        "warning_alerts": 4,
+        "info_alerts": 15,
+        "first_detection_latency_ms": null,
+        "completeness_percent": 0.0,
+        "categories": {
+          "timestomp": false,
+          "wipe": false,
+          "deletion": false,
+          "wiper_rename": false,
+          "canary": false
+        },
+        "chain_alerts": 1
+      },
+      "evidence_preservation": {
+        "integrity": "VERIFIED",
+        "message": "All 19 entries verified"
+      },
+      "canary": {
+        "deployed": 3,
+        "compromised": 3
+      }
+    }
+  ],
+  "false_positive_test": {
+    "test": "false_positive",
+    "duration_seconds": 10,
+    "total_alerts": 0,
+    "false_positives": 0,
+    "false_positive_rate_per_min": 0.0
+  },
+  "summary": {
+    "total_trials": 5,
+    "detection_latency_ms": {
+      "mean": 217.38,
+      "median": 217.38,
+      "std": 299.54,
+      "min": 5.57,
+      "max": 429.18
+    },
+    "attack_duration_ms": {
+      "mean": 98.32,
+      "median": 7.42,
+      "std": 204.16,
+      "min": 5.59,
+      "max": 463.52
+    },
+    "completeness": {
+      "mean": 8.0,
+      "median": 0.0,
+      "std": 10.95,
+      "min": 0.0,
+      "max": 20.0
+    },
+    "detection_rates": {
+      "timestomp": 0.0,
+      "wipe": 0.0,
+      "deletion": 0.0,
+      "wiper_rename": 40.0,
+      "canary": 0.0
+    },
+    "evidence_integrity_rate": 100.0,
+    "false_positive_rate": 0.0
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "descriptive": {
+    "latency": {
+      "n": 2,
+      "mean": 217.375,
+      "median": 217.375,
+      "std": 299.5375,
+      "min": 5.57,
+      "max": 429.18
+    },
+    "completeness": {
+      "n": 5,
+      "mean": 8.0,
+      "median": 0.0,
+      "std": 10.9545,
+      "min": 0.0,
+      "max": 20.0
+    },
+    "attack_duration": {
+      "n": 5,
+      "mean": 98.318,
+      "median": 7.42,
+      "std": 204.1579,
+      "min": 5.59,
+      "max": 463.52
+    }
+  },
+  "mann_whitney_u": {
+    "latency": {
+      "U": 0.0,
+      "z": -1.9365,
+      "p": 0.052807,
+      "r": 1.0,
+      "r_interpretation": "large",
+      "significant": false
+    },
+    "completeness": {
+      "U": 7.5,
+      "z": 1.0445,
+      "p": 0.29627,
+      "r": 0.4,
+      "r_interpretation": "medium",
+      "significant": false
+    }
+  },
+  "detection_rates": {
+    "timestomp": 0.0,
+    "wipe": 0.0,
+    "deletion": 0.0,
+    "wiper_rename": 40.0,
+    "canary": 0.0
+  },
+  "evidence_integrity_rate": 100.0,
+  "false_positive": {
+    "test": "false_positive",
+    "duration_seconds": 10,
+    "total_alerts": 0,
+    "false_positives": 0,
+    "false_positive_rate_per_min": 0.0
+  }
+}

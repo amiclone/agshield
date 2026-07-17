@@ -364,7 +364,84 @@ class ForensicTimeline:
             return False, str(e)
 
 # ═══════════════════════════════════════════════════════════
-# LAYER 6: Windows Service Support
+# LAYER 7: Canary Deployer (Deception-Based Detection)
+# ═══════════════════════════════════════════════════════════
+CANARY_TEMPLATES = [
+    {"name": "passwords_backup.txt", "content": "# Password Vault Export\n# Generated: 2024-03-15\nadmin:P@ssw0rd123!\nroot:Tr0ub4dor&3\n"},
+    {"name": "ssh_private_key.bak", "content": "-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAE\nCANARY_FILE_DO_NOT_USE\n-----END OPENSSH PRIVATE KEY-----\n"},
+    {"name": "financial_report_Q4_CONFIDENTIAL.csv", "content": "Date,Account,Amount\n2024-01-15,Corporate,1250000.00\n2024-02-01,Reserve,890000.50\n"},
+    {"name": "database_credentials.conf", "content": "[production]\nhost=10.0.1.50\nuser=prod_admin\npassword=xK9mL2vQ7nR4\n"},
+    {"name": ".aws_credentials_old", "content": "[default]\naws_access_key_id=AKIAIOSFODNN7EXAMPLE\naws_secret_access_key=wJalrXUtnFEMI\n"},
+]
+
+class CanaryDeployer:
+    """Deploys honeypot files. Any interaction = zero-false-positive intrusion."""
+    def __init__(self, registry_path=None):
+        home = os.path.expanduser("~")
+        self.registry_path = registry_path or os.path.join(home, "Desktop", "canary_registry.json")
+        self.registry = {}  # {filepath: {sha256, deployed_at}}
+        self._load()
+
+    def _load(self):
+        if os.path.exists(self.registry_path):
+            try:
+                with open(self.registry_path, "r") as f: self.registry = json.load(f)
+            except: self.registry = {}
+
+    def _save(self):
+        try:
+            with open(self.registry_path, "w") as f: json.dump(self.registry, f, indent=2)
+        except: pass
+
+    def deploy(self, target_dir, count=3):
+        """Deploy canary files into target_dir. Returns list of deployed paths."""
+        import random as _rnd
+        if not os.path.isdir(target_dir): return []
+        templates = _rnd.sample(CANARY_TEMPLATES, min(count, len(CANARY_TEMPLATES)))
+        deployed = []
+        for t in templates:
+            fp = os.path.join(target_dir, t["name"])
+            if os.path.exists(fp) and fp not in self.registry: continue
+            try:
+                with open(fp, "w") as f: f.write(t["content"])
+                sha = hashlib.sha256(t["content"].encode()).hexdigest()
+                self.registry[fp] = {"sha256": sha, "deployed_at": time.time(), "name": t["name"]}
+                deployed.append(fp)
+                sp(f"  {G}[CANARY]{X} Deployed: {C}{t['name']}{X}")
+            except: pass
+        self._save()
+        return deployed
+
+    def verify(self):
+        """Check all canaries. Returns list of alert dicts."""
+        alerts = []
+        for fp, meta in list(self.registry.items()):
+            if not os.path.exists(fp):
+                alerts.append({"type": "CANARY_MISSING", "path": fp, "name": meta["name"]})
+                continue
+            try:
+                with open(fp, "r") as f: content = f.read()
+                sha = hashlib.sha256(content.encode()).hexdigest()
+                if sha != meta["sha256"]:
+                    alerts.append({"type": "CANARY_TAMPERED", "path": fp, "name": meta["name"],
+                                   "original": meta["sha256"][:12], "current": sha[:12]})
+            except:
+                alerts.append({"type": "CANARY_UNREADABLE", "path": fp, "name": meta["name"]})
+        return alerts
+
+    def is_canary(self, path):
+        """Check if a path is a registered canary file."""
+        return path in self.registry
+
+    def cleanup(self):
+        for fp in list(self.registry.keys()):
+            try:
+                if os.path.exists(fp): os.remove(fp)
+            except: pass
+        self.registry = {}; self._save()
+
+# ═══════════════════════════════════════════════════════════
+# Windows Service Support
 # ═══════════════════════════════════════════════════════════
 def install_service():
     """Install the shield as a Windows scheduled task (auto-start)."""
@@ -393,7 +470,7 @@ def uninstall_service():
 # CORE: File System Detector
 # ═══════════════════════════════════════════════════════════
 class ShieldDetector(FileSystemEventHandler):
-    def __init__(self, correlator, anomaly, response, tracker, siem=None, timeline=None):
+    def __init__(self, correlator, anomaly, response, tracker, siem=None, timeline=None, canary=None):
         super().__init__()
         self.start_time = time.time()
         self.alerts = []; self.lock = threading.Lock()
@@ -406,9 +483,11 @@ class ShieldDetector(FileSystemEventHandler):
         self.tracker = tracker
         self.siem = siem
         self.timeline = timeline
+        self.canary = canary
         self.ignore = ["__pycache__",".pyc","ntuser.dat","UsrClass.dat",
             "thumbcache",".tmp","~$","shield_v3","shield_experiment",
-            "shield_evidence_vault","shield_siem","shield_forensic"]
+            "shield_evidence_vault","shield_siem","shield_forensic",
+            "canary_registry.json"]
 
     def _ign(self, p):
         lo = p.lower()
@@ -473,6 +552,11 @@ class ShieldDetector(FileSystemEventHandler):
         try:
             if event.is_directory: return
             p = event.src_path; pid, proc = self._get_proc(p)
+            # Canary tampering check
+            if self.canary and self.canary.is_canary(p):
+                self._alert("CRITICAL","CANARY_TAMPERED",p,
+                    f"Honeypot file MODIFIED: {os.path.basename(p)} — intrusion confirmed!",pid,proc)
+                return
             if p in self.file_hashes:
                 try:
                     oh, os_ = self.file_hashes[p]
@@ -503,6 +587,11 @@ class ShieldDetector(FileSystemEventHandler):
             if event.is_directory:
                 self._alert("WARNING","DIR_DELETED",p,
                     f"Directory removed: {os.path.basename(p)}"); return
+            # Canary deletion check
+            if self.canary and self.canary.is_canary(p):
+                self._alert("CRITICAL","CANARY_MISSING",p,
+                    f"Honeypot file DELETED: {os.path.basename(p)} — intrusion confirmed!")
+                return
             if p in self.file_birth:
                 lt = time.time()-self.file_birth[p]
                 if lt < 5.0:
@@ -556,8 +645,9 @@ def main():
     anomaly = AnomalyEngine(alert_cb=anomaly_alert, learn_secs=60)
     response = ResponseEngine()
     tracker = ProcessTracker()
-    siem = SIEMConnector()  # Writes CEF logs to Desktop
-    timeline = ForensicTimeline()  # Hash-chained forensic timeline
+    siem = SIEMConnector()
+    timeline = ForensicTimeline()
+    canary = CanaryDeployer()
 
     sp(f"""
   {G}{BOLD}
@@ -585,12 +675,19 @@ def main():
     sp(f"    {G}✓{X} Response Engine (RECOMMEND actions, human approves)")
     sp(f"    {G}✓{X} SIEM Connector (CEF syslog format)")
     sp(f"    {G}✓{X} Forensic Timeline (hash-chain tamper-proof)")
+    sp(f"    {G}✓{X} Canary Deployer (honeypot deception tripwires)")
     sp(f"  {DIM}  Evidence vault: {response.vault_dir}{X}")
     sp(f"  {DIM}  SIEM log: {siem.log_file}{X}")
     sp(f"  {DIM}  Timeline: {timeline.timeline_file}{X}")
     sp(f"")
 
-    detector = ShieldDetector(correlator, anomaly, response, tracker, siem, timeline)
+    # Deploy canaries to Desktop
+    desktop = os.path.join(home, "Desktop")
+    if os.path.isdir(desktop):
+        canary.deploy(desktop, count=3)
+    sp(f"")
+
+    detector = ShieldDetector(correlator, anomaly, response, tracker, siem, timeline, canary)
     observers = {}
     for d in watch_dirs:
         try:
@@ -635,6 +732,12 @@ def main():
                    f"Events:{t} | {R}CRIT:{c}{X}{DIM} | "
                    f"Chains:{ch} | AI:{'learned' if ai['learned'] else 'learning'} | "
                    f"{alive}/{len(observers)} monitors{X}")
+                # Periodic canary verification
+                cv = canary.verify()
+                for ca in cv:
+                    pid, proc = 0, ""
+                    detector._alert("CRITICAL", ca["type"], ca["path"],
+                        f"Honeypot '{ca['name']}' {ca['type'].split('_')[1].lower()}!")
     except KeyboardInterrupt:
         pass
 
@@ -659,6 +762,10 @@ def main():
     sp(f"    AI anomalies: {ai['anomalies']}")
     sp(f"    Attack chains: {correlator.chains_detected}")
     sp(f"    Evidence preserved: {len(response.preserved)}")
+    # Final canary check
+    final_canary = canary.verify()
+    canary_ok = len(final_canary) == 0
+    sp(f"    Canary files: {'ALL INTACT' if canary_ok else f'{len(final_canary)} COMPROMISED'}")
     sp(f"\n  {BOLD}Events:{X}")
     ec = defaultdict(int)
     for a in detector.alerts: ec[a["event_type"]] += 1
@@ -675,7 +782,9 @@ def main():
     with open(rpath, "w") as f:
         json.dump({"alerts":detector.alerts,"counts":dict(detector.counts),
             "events":dict(ec),"ai":ai,"chains":correlator.chains_detected,
-            "evidence":response.preserved}, f, indent=2, default=str)
+            "evidence":response.preserved,
+            "canary":{"deployed":len(canary.registry),"compromised":len(final_canary),
+                      "status":"INTACT" if canary_ok else "COMPROMISED"}}, f, indent=2, default=str)
     sp(f"\n  {G}Report: {rpath}{X}")
     sp(f"  {'='*60}\n")
     input("  Press Enter to exit...")
