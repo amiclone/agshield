@@ -1,0 +1,482 @@
+{
+  "framework": "AntiGravity Shield",
+  "version": "1.0.0",
+  "start_time": 1783530028.660618,
+  "end_time": 1783530033.373163,
+  "duration_seconds": 4.7125,
+  "watched_paths": [
+    "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace"
+  ],
+  "summary": {
+    "total_alerts": 23,
+    "by_severity": {
+      "INFO": 7,
+      "WARNING": 2,
+      "CRITICAL": 14
+    },
+    "by_module": {
+      "realtime_monitor": 10,
+      "behavioral_detector": 5,
+      "timestamp_validator": 2,
+      "canary_deployer": 6
+    },
+    "by_event_type": {
+      "FILE_CREATED": 3,
+      "FILE_MODIFIED": 5,
+      "OPERATION_BURST": 4,
+      "TIMESTAMP_RETRODATED": 1,
+      "CTIME_MTIME_DIVERGENCE": 1,
+      "FILE_MOVED": 1,
+      "FILE_DELETED": 1,
+      "WIPER_SIGNATURE": 1,
+      "CANARY_MISSING": 6
+    }
+  },
+  "log_integrity": {
+    "valid": true,
+    "entries_checked": 549,
+    "error": null
+  },
+  "behavioral_stats": {
+    "total_events": 10,
+    "burst_alerts": 4,
+    "wiper_alerts": 1,
+    "ephemeral_alerts": 0
+  },
+  "canary_status": {
+    "deployed": 8,
+    "final_verification": "FAILED"
+  },
+  "alerts": [
+    {
+      "module": "realtime_monitor",
+      "event_type": "FILE_CREATED",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt",
+      "detection_wall_time": 1783530029.2705853,
+      "detection_perf_time": 65624.011246253,
+      "severity": "INFO",
+      "details": {
+        "sha256": "0819c5876434b524742f7f3c870d563fe3edf7a624caf6eabc4aeda73bd17925",
+        "size": 65
+      },
+      "detection_latency_ms": 609.97
+    },
+    {
+      "module": "realtime_monitor",
+      "event_type": "FILE_MODIFIED",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt",
+      "detection_wall_time": 1783530029.2815351,
+      "detection_perf_time": 65624.022196317,
+      "severity": "INFO",
+      "details": {},
+      "detection_latency_ms": 620.92
+    },
+    {
+      "module": "realtime_monitor",
+      "event_type": "FILE_CREATED",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/malware_dropper.exe",
+      "detection_wall_time": 1783530029.2887495,
+      "detection_perf_time": 65624.029410663,
+      "severity": "WARNING",
+      "details": {
+        "reason": "Suspicious executable created",
+        "sha256": "e19c53d7dfd4a676e23dd190001f98d0fb1ba132d30022cc3ad6b32e5a3158fe",
+        "size": 25
+      },
+      "detection_latency_ms": 628.13
+    },
+    {
+      "module": "realtime_monitor",
+      "event_type": "FILE_MODIFIED",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/malware_dropper.exe",
+      "detection_wall_time": 1783530029.2967148,
+      "detection_perf_time": 65624.037375932,
+      "severity": "INFO",
+      "details": {},
+      "detection_latency_ms": 636.1
+    },
+    {
+      "module": "behavioral_detector",
+      "event_type": "OPERATION_BURST",
+      "path": "multiple",
+      "detection_wall_time": 1783530029.3079195,
+      "detection_perf_time": 65624.048581691,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Abnormal burst: 4 file operations in 1.0s window. Normal user activity averages <1 op/sec. This is characteristic of automated anti-forensic tools.",
+        "operations_in_window": 4,
+        "window_seconds": 1.0,
+        "events": [
+          {
+            "time": 1783530029.2705853,
+            "type": "FILE_CREATED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt"
+          },
+          {
+            "time": 1783530029.2815351,
+            "type": "FILE_MODIFIED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt"
+          },
+          {
+            "time": 1783530029.2887495,
+            "type": "FILE_CREATED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/malware_dropper.exe"
+          },
+          {
+            "time": 1783530029.2967148,
+            "type": "FILE_MODIFIED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/malware_dropper.exe"
+          }
+        ],
+        "technique": "Automated Anti-Forensic Agent Detection"
+      },
+      "detection_latency_ms": 647.3
+    },
+    {
+      "module": "realtime_monitor",
+      "event_type": "FILE_MODIFIED",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/malware_dropper.exe",
+      "detection_wall_time": 1783530031.2870288,
+      "detection_perf_time": 65626.027689082,
+      "severity": "INFO",
+      "details": {},
+      "detection_latency_ms": 2626.41
+    },
+    {
+      "module": "timestamp_validator",
+      "event_type": "TIMESTAMP_RETRODATED",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/malware_dropper.exe",
+      "detection_wall_time": 1783530031.3043153,
+      "detection_perf_time": 65626.0449774,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "File mtime (2025-06-19 18:00:31) is 384 days old, but ctime (2026-07-08 18:00:31) is 0.0 days old. This is a definitive indicator of TIMESTOMPING \u2014 os.utime() changes mtime but cannot change ctime on Linux.",
+        "mtime": 1750352431.27146,
+        "ctime": 1783530031.2705321,
+        "mtime_human": "2025-06-19 18:00:31",
+        "ctime_human": "2026-07-08 18:00:31",
+        "age_days": 384.0,
+        "ctime_age_days": 0.0,
+        "technique": "T1070.006 - Timestomp (MITRE ATT&CK)"
+      },
+      "detection_latency_ms": 2643.7
+    },
+    {
+      "module": "timestamp_validator",
+      "event_type": "CTIME_MTIME_DIVERGENCE",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/malware_dropper.exe",
+      "detection_wall_time": 1783530031.3043272,
+      "detection_perf_time": 65626.044988806,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Massive divergence between mtime and ctime (384 days apart). On Linux, this is physically impossible without timestamp manipulation.",
+        "mtime": 1750352431.27146,
+        "ctime": 1783530031.2705321,
+        "divergence_days": 384.0
+      },
+      "detection_latency_ms": 2643.71
+    },
+    {
+      "module": "realtime_monitor",
+      "event_type": "FILE_MODIFIED",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt",
+      "detection_wall_time": 1783530031.3054056,
+      "detection_perf_time": 65626.046066731,
+      "severity": "INFO",
+      "details": {},
+      "detection_latency_ms": 2644.79
+    },
+    {
+      "module": "realtime_monitor",
+      "event_type": "FILE_MOVED",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt",
+      "dest_path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/81a2ewys0qmh",
+      "detection_wall_time": 1783530031.3061674,
+      "detection_perf_time": 65626.046828477,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "File renamed to random string (stolen_plans.txt \u2192 81a2ewys0qmh). Signature of anti-forensic secure wiper."
+      },
+      "detection_latency_ms": 2645.55
+    },
+    {
+      "module": "realtime_monitor",
+      "event_type": "FILE_DELETED",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/81a2ewys0qmh",
+      "detection_wall_time": 1783530031.3160346,
+      "detection_perf_time": 65626.056695627,
+      "severity": "WARNING",
+      "details": {},
+      "detection_latency_ms": 2655.42
+    },
+    {
+      "module": "behavioral_detector",
+      "event_type": "OPERATION_BURST",
+      "path": "multiple",
+      "detection_wall_time": 1783530031.3168747,
+      "detection_perf_time": 65626.057536727,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Abnormal burst: 4 file operations in 1.0s window. Normal user activity averages <1 op/sec. This is characteristic of automated anti-forensic tools.",
+        "operations_in_window": 4,
+        "window_seconds": 1.0,
+        "events": [
+          {
+            "time": 1783530031.2870288,
+            "type": "FILE_MODIFIED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/malware_dropper.exe"
+          },
+          {
+            "time": 1783530031.3054056,
+            "type": "FILE_MODIFIED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt"
+          },
+          {
+            "time": 1783530031.3061674,
+            "type": "FILE_MOVED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt"
+          },
+          {
+            "time": 1783530031.3160346,
+            "type": "FILE_DELETED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/81a2ewys0qmh"
+          }
+        ],
+        "technique": "Automated Anti-Forensic Agent Detection"
+      },
+      "detection_latency_ms": 2656.26
+    },
+    {
+      "module": "behavioral_detector",
+      "event_type": "WIPER_SIGNATURE",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/81a2ewys0qmh",
+      "detection_wall_time": 1783530031.3187778,
+      "detection_perf_time": 65626.059439828,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "SECURE WIPER DETECTED: Modify\u2192Rename\u2192Delete sequence completed within 2.0s. This is the exact signature of anti-forensic data wiping tools that overwrite content before deletion to prevent recovery.",
+        "sequence": [
+          {
+            "type": "FILE_MODIFIED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/malware_dropper.exe",
+            "time": 1783530031.2870288
+          },
+          {
+            "type": "FILE_MODIFIED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt",
+            "time": 1783530031.3054056
+          },
+          {
+            "type": "FILE_MOVED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt",
+            "time": 1783530031.3061674
+          },
+          {
+            "type": "FILE_DELETED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/81a2ewys0qmh",
+            "time": 1783530031.3160346
+          }
+        ],
+        "technique": "T1485 - Data Destruction (MITRE ATT&CK)"
+      },
+      "detection_latency_ms": 2658.16
+    },
+    {
+      "module": "realtime_monitor",
+      "event_type": "FILE_CREATED",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/operation_report.json",
+      "detection_wall_time": 1783530031.3206434,
+      "detection_perf_time": 65626.061303311,
+      "severity": "INFO",
+      "details": {
+        "sha256": "ab4b6d1bef8c42fbc07726cc3d1684f40a6cdb65b7be6f1d36003b8f6baf6de7",
+        "size": 545
+      },
+      "detection_latency_ms": 2660.02
+    },
+    {
+      "module": "behavioral_detector",
+      "event_type": "OPERATION_BURST",
+      "path": "multiple",
+      "detection_wall_time": 1783530031.3260748,
+      "detection_perf_time": 65626.066736873,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Abnormal burst: 5 file operations in 1.0s window. Normal user activity averages <1 op/sec. This is characteristic of automated anti-forensic tools.",
+        "operations_in_window": 5,
+        "window_seconds": 1.0,
+        "events": [
+          {
+            "time": 1783530031.2870288,
+            "type": "FILE_MODIFIED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/malware_dropper.exe"
+          },
+          {
+            "time": 1783530031.3054056,
+            "type": "FILE_MODIFIED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt"
+          },
+          {
+            "time": 1783530031.3061674,
+            "type": "FILE_MOVED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt"
+          },
+          {
+            "time": 1783530031.3160346,
+            "type": "FILE_DELETED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/81a2ewys0qmh"
+          },
+          {
+            "time": 1783530031.3206434,
+            "type": "FILE_CREATED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/operation_report.json"
+          }
+        ],
+        "technique": "Automated Anti-Forensic Agent Detection"
+      },
+      "detection_latency_ms": 2665.46
+    },
+    {
+      "module": "realtime_monitor",
+      "event_type": "FILE_MODIFIED",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/operation_report.json",
+      "detection_wall_time": 1783530031.327074,
+      "detection_perf_time": 65626.067735092,
+      "severity": "INFO",
+      "details": {},
+      "detection_latency_ms": 2666.45
+    },
+    {
+      "module": "behavioral_detector",
+      "event_type": "OPERATION_BURST",
+      "path": "multiple",
+      "detection_wall_time": 1783530031.334325,
+      "detection_perf_time": 65626.074986967,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Abnormal burst: 6 file operations in 1.0s window. Normal user activity averages <1 op/sec. This is characteristic of automated anti-forensic tools.",
+        "operations_in_window": 6,
+        "window_seconds": 1.0,
+        "events": [
+          {
+            "time": 1783530031.2870288,
+            "type": "FILE_MODIFIED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/malware_dropper.exe"
+          },
+          {
+            "time": 1783530031.3054056,
+            "type": "FILE_MODIFIED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt"
+          },
+          {
+            "time": 1783530031.3061674,
+            "type": "FILE_MOVED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/stolen_plans.txt"
+          },
+          {
+            "time": 1783530031.3160346,
+            "type": "FILE_DELETED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/81a2ewys0qmh"
+          },
+          {
+            "time": 1783530031.3206434,
+            "type": "FILE_CREATED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/operation_report.json"
+          },
+          {
+            "time": 1783530031.327074,
+            "type": "FILE_MODIFIED",
+            "file": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/operation_report.json"
+          }
+        ],
+        "technique": "Automated Anti-Forensic Agent Detection"
+      },
+      "detection_latency_ms": 2673.71
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/vpn_config_backup.ovpn",
+      "detection_wall_time": 1783530033.30166,
+      "detection_perf_time": 65628.042322601,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: vpn_config_backup.ovpn",
+        "deployed_at": 1783530022.8451538,
+        "original_sha256": "663e62b1b1e4d6ac13e83f22c50e61fb010f5001a24d550b79ad4c994671b048"
+      },
+      "detection_latency_ms": 4641.04
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/passwords_backup.txt",
+      "detection_wall_time": 1783530033.3017037,
+      "detection_perf_time": 65628.042365529,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: passwords_backup.txt",
+        "deployed_at": 1778973170.6665199,
+        "original_sha256": "1081ad390213f3e4bc22759c05f2c5d80730f0ea5157cff131bf4b15fae15e9b"
+      },
+      "detection_latency_ms": 4641.09
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/ssh_private_key.bak",
+      "detection_wall_time": 1783530033.301731,
+      "detection_perf_time": 65628.042393405,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: ssh_private_key.bak",
+        "deployed_at": 1783530005.5906339,
+        "original_sha256": "993c21e642aaec80aa850cf0477b48a6323642cc2c26c687886ef83b417f2e67"
+      },
+      "detection_latency_ms": 4641.11
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/employee_ssn_list.xlsx.bak",
+      "detection_wall_time": 1783530033.3019166,
+      "detection_perf_time": 65628.042578704,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: employee_ssn_list.xlsx.bak",
+        "deployed_at": 1783530011.357153,
+        "original_sha256": "851cdad3eaf675976a2d8aaaabf020e4c94477a0bd75b8c43f4cd0ce400ada75"
+      },
+      "detection_latency_ms": 4641.3
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/bitcoin_wallet.dat.bak",
+      "detection_wall_time": 1783530033.301943,
+      "detection_perf_time": 65628.042604783,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: bitcoin_wallet.dat.bak",
+        "deployed_at": 1783529994.1245353,
+        "original_sha256": "476dcc7da55865d6655aa1c1a278fb7fc1f91fe749443ecc99654e2550ac7021"
+      },
+      "detection_latency_ms": 4641.32
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/.aws_credentials_old",
+      "detection_wall_time": 1783530033.3020685,
+      "detection_perf_time": 65628.042730528,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: .aws_credentials_old",
+        "deployed_at": 1783530011.3573353,
+        "original_sha256": "d644e2ff8a7cfd657ca48d0e445446ec2b4b4540b9f5a7f3c64cc5bcbde2fd38"
+      },
+      "detection_latency_ms": 4641.45
+    }
+  ],
+  "report_path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/reports/shield_report_1783530028.json"
+}

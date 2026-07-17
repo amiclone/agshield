@@ -1,0 +1,280 @@
+{
+  "experiment_date": "2026-05-17T00:12:11.646863",
+  "stealth_trials": [
+    {
+      "trial": 1,
+      "mode": "stealth",
+      "delay_seconds": 0,
+      "agent_execution_time_seconds": 0.0006,
+      "attack_total_duration_seconds": 2.0398,
+      "detection": {
+        "total_alerts": 17,
+        "critical_alerts": 8,
+        "warning_alerts": 2,
+        "first_detection_latency_seconds": 0.052,
+        "first_detection_latency_ms": 51.97,
+        "detected_timestomp": true,
+        "detected_wiper": true,
+        "detected_deletion": true,
+        "detected_burst": true,
+        "detected_canary_tampering": false,
+        "completeness_percent": 100.0,
+        "expected_detections": [
+          "timestomp",
+          "wipe",
+          "deletion",
+          "burst"
+        ],
+        "actual_detections": [
+          "timestomp",
+          "wipe",
+          "deletion",
+          "burst"
+        ]
+      },
+      "shield_report_path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/reports/shield_report_1778973131.json"
+    },
+    {
+      "trial": 2,
+      "mode": "stealth",
+      "delay_seconds": 0,
+      "agent_execution_time_seconds": 0.0004,
+      "attack_total_duration_seconds": 2.0386,
+      "detection": {
+        "total_alerts": 19,
+        "critical_alerts": 10,
+        "warning_alerts": 2,
+        "first_detection_latency_seconds": 0.0518,
+        "first_detection_latency_ms": 51.84,
+        "detected_timestomp": true,
+        "detected_wiper": true,
+        "detected_deletion": true,
+        "detected_burst": true,
+        "detected_canary_tampering": true,
+        "completeness_percent": 100.0,
+        "expected_detections": [
+          "timestomp",
+          "wipe",
+          "deletion",
+          "burst"
+        ],
+        "actual_detections": [
+          "timestomp",
+          "wipe",
+          "deletion",
+          "burst"
+        ]
+      },
+      "shield_report_path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/reports/shield_report_1778973137.json"
+    },
+    {
+      "trial": 3,
+      "mode": "stealth",
+      "delay_seconds": 0,
+      "agent_execution_time_seconds": 0.0006,
+      "attack_total_duration_seconds": 2.044,
+      "detection": {
+        "total_alerts": 20,
+        "critical_alerts": 11,
+        "warning_alerts": 2,
+        "first_detection_latency_seconds": 0.0566,
+        "first_detection_latency_ms": 56.59,
+        "detected_timestomp": true,
+        "detected_wiper": true,
+        "detected_deletion": true,
+        "detected_burst": true,
+        "detected_canary_tampering": true,
+        "completeness_percent": 100.0,
+        "expected_detections": [
+          "timestomp",
+          "wipe",
+          "deletion",
+          "burst"
+        ],
+        "actual_detections": [
+          "timestomp",
+          "wipe",
+          "deletion",
+          "burst"
+        ]
+      },
+      "shield_report_path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/reports/shield_report_1778973142.json"
+    },
+    {
+      "trial": 4,
+      "mode": "stealth",
+      "delay_seconds": 0,
+      "agent_execution_time_seconds": 0.0006,
+      "attack_total_duration_seconds": 2.0396,
+      "detection": {
+        "total_alerts": 21,
+        "critical_alerts": 12,
+        "warning_alerts": 2,
+        "first_detection_latency_seconds": 0.0511,
+        "first_detection_latency_ms": 51.14,
+        "detected_timestomp": true,
+        "detected_wiper": true,
+        "detected_deletion": true,
+        "detected_burst": true,
+        "detected_canary_tampering": true,
+        "completeness_percent": 100.0,
+        "expected_detections": [
+          "timestomp",
+          "wipe",
+          "deletion",
+          "burst"
+        ],
+        "actual_detections": [
+          "timestomp",
+          "wipe",
+          "deletion",
+          "burst"
+        ]
+      },
+      "shield_report_path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/reports/shield_report_1778973148.json"
+    },
+    {
+      "trial": 5,
+      "mode": "stealth",
+      "delay_seconds": 0,
+      "agent_execution_time_seconds": 0.0005,
+      "attack_total_duration_seconds": 2.0395,
+      "detection": {
+        "total_alerts": 21,
+        "critical_alerts": 12,
+        "warning_alerts": 2,
+        "first_detection_latency_seconds": 0.0511,
+        "first_detection_latency_ms": 51.06,
+        "detected_timestomp": true,
+        "detected_wiper": true,
+        "detected_deletion": true,
+        "detected_burst": true,
+        "detected_canary_tampering": true,
+        "completeness_percent": 100.0,
+        "expected_detections": [
+          "timestomp",
+          "wipe",
+          "deletion",
+          "burst"
+        ],
+        "actual_detections": [
+          "timestomp",
+          "wipe",
+          "deletion",
+          "burst"
+        ]
+      },
+      "shield_report_path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/reports/shield_report_1778973153.json"
+    }
+  ],
+  "noisy_trials": [
+    {
+      "trial": 1,
+      "mode": "noisy",
+      "delay_seconds": 0,
+      "agent_execution_time_seconds": 0.0001,
+      "attack_total_duration_seconds": 2.039,
+      "detection": {
+        "total_alerts": 13,
+        "critical_alerts": 6,
+        "warning_alerts": 2,
+        "first_detection_latency_seconds": 0.0525,
+        "first_detection_latency_ms": 52.51,
+        "detected_timestomp": false,
+        "detected_wiper": false,
+        "detected_deletion": true,
+        "detected_burst": true,
+        "detected_canary_tampering": true,
+        "completeness_percent": 100.0,
+        "expected_detections": [
+          "deletion"
+        ],
+        "actual_detections": [
+          "deletion"
+        ]
+      },
+      "shield_report_path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/reports/shield_report_1778973159.json"
+    },
+    {
+      "trial": 2,
+      "mode": "noisy",
+      "delay_seconds": 0,
+      "agent_execution_time_seconds": 0.0002,
+      "attack_total_duration_seconds": 2.0396,
+      "detection": {
+        "total_alerts": 14,
+        "critical_alerts": 7,
+        "warning_alerts": 2,
+        "first_detection_latency_seconds": 0.0516,
+        "first_detection_latency_ms": 51.59,
+        "detected_timestomp": false,
+        "detected_wiper": false,
+        "detected_deletion": true,
+        "detected_burst": true,
+        "detected_canary_tampering": true,
+        "completeness_percent": 100.0,
+        "expected_detections": [
+          "deletion"
+        ],
+        "actual_detections": [
+          "deletion"
+        ]
+      },
+      "shield_report_path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/reports/shield_report_1778973165.json"
+    },
+    {
+      "trial": 3,
+      "mode": "noisy",
+      "delay_seconds": 0,
+      "agent_execution_time_seconds": 0.0001,
+      "attack_total_duration_seconds": 2.0405,
+      "detection": {
+        "total_alerts": 15,
+        "critical_alerts": 8,
+        "warning_alerts": 2,
+        "first_detection_latency_seconds": 0.0566,
+        "first_detection_latency_ms": 56.6,
+        "detected_timestomp": false,
+        "detected_wiper": false,
+        "detected_deletion": true,
+        "detected_burst": true,
+        "detected_canary_tampering": true,
+        "completeness_percent": 100.0,
+        "expected_detections": [
+          "deletion"
+        ],
+        "actual_detections": [
+          "deletion"
+        ]
+      },
+      "shield_report_path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/reports/shield_report_1778973170.json"
+    }
+  ],
+  "false_positive_test": {
+    "test": "false_positive",
+    "duration_seconds": 5,
+    "total_alerts": 8,
+    "false_positives": 8,
+    "false_positive_rate": 1.6
+  },
+  "summary": {
+    "stealth_mode": {
+      "trials": 5,
+      "avg_agent_execution_ms": 0.54,
+      "avg_detection_latency_ms": 52.52,
+      "min_detection_latency_ms": 51.06,
+      "max_detection_latency_ms": 56.59,
+      "avg_completeness_percent": 100.0,
+      "detection_rate_timestomp": 100.0,
+      "detection_rate_wiper": 100.0,
+      "detection_rate_deletion": 100.0,
+      "detection_rate_burst": 100.0
+    },
+    "noisy_mode": {
+      "trials": 3,
+      "avg_detection_latency_ms": 53.57,
+      "detection_rate": 100.0
+    },
+    "false_positive_rate": 1.6
+  }
+}

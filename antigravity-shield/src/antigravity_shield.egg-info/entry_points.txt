@@ -1,0 +1,3 @@
+[console_scripts]
+agshield = agshield.cli:main
+antigravity = agshield.cli:main

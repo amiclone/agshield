@@ -1,0 +1,152 @@
+{
+  "framework": "AntiGravity Shield",
+  "version": "1.0.0",
+  "start_time": 1778973176.2407334,
+  "end_time": 1778973181.279132,
+  "duration_seconds": 5.0384,
+  "watched_paths": [
+    "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace"
+  ],
+  "summary": {
+    "total_alerts": 8,
+    "by_severity": {
+      "CRITICAL": 8
+    },
+    "by_module": {
+      "canary_deployer": 8
+    },
+    "by_event_type": {
+      "CANARY_MISSING": 8
+    }
+  },
+  "log_integrity": {
+    "valid": true,
+    "entries_checked": 148,
+    "error": null
+  },
+  "behavioral_stats": {
+    "total_events": 0,
+    "burst_alerts": 0,
+    "wiper_alerts": 0,
+    "ephemeral_alerts": 0
+  },
+  "canary_status": {
+    "deployed": 8,
+    "final_verification": "FAILED"
+  },
+  "alerts": [
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/vpn_config_backup.ovpn",
+      "detection_wall_time": 1778973181.272627,
+      "detection_perf_time": 37323.617168068,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: vpn_config_backup.ovpn",
+        "deployed_at": 1778973142.8108385,
+        "original_sha256": "663e62b1b1e4d6ac13e83f22c50e61fb010f5001a24d550b79ad4c994671b048"
+      },
+      "detection_latency_ms": 5031.89
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/passwords_backup.txt",
+      "detection_wall_time": 1778973181.2726386,
+      "detection_perf_time": 37323.617179163,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: passwords_backup.txt",
+        "deployed_at": 1778973170.6665199,
+        "original_sha256": "1081ad390213f3e4bc22759c05f2c5d80730f0ea5157cff131bf4b15fae15e9b"
+      },
+      "detection_latency_ms": 5031.9
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/ssh_private_key.bak",
+      "detection_wall_time": 1778973181.272648,
+      "detection_perf_time": 37323.617188767,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: ssh_private_key.bak",
+        "deployed_at": 1778973165.09444,
+        "original_sha256": "993c21e642aaec80aa850cf0477b48a6323642cc2c26c687886ef83b417f2e67"
+      },
+      "detection_latency_ms": 5031.91
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/financial_report_Q4_CONFIDENTIAL.csv",
+      "detection_wall_time": 1778973181.272657,
+      "detection_perf_time": 37323.617197376,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: financial_report_Q4_CONFIDENTIAL.csv",
+        "deployed_at": 1778973153.9498212,
+        "original_sha256": "11dd6d7635724aaf3d04fff000171d6d028ffea70ac83fae869583a3c3750b1f"
+      },
+      "detection_latency_ms": 5031.92
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/employee_ssn_list.xlsx.bak",
+      "detection_wall_time": 1778973181.2726645,
+      "detection_perf_time": 37323.617205164,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: employee_ssn_list.xlsx.bak",
+        "deployed_at": 1778973159.5242233,
+        "original_sha256": "851cdad3eaf675976a2d8aaaabf020e4c94477a0bd75b8c43f4cd0ce400ada75"
+      },
+      "detection_latency_ms": 5031.93
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/bitcoin_wallet.dat.bak",
+      "detection_wall_time": 1778973181.272672,
+      "detection_perf_time": 37323.617212598,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: bitcoin_wallet.dat.bak",
+        "deployed_at": 1778973148.3798058,
+        "original_sha256": "476dcc7da55865d6655aa1c1a278fb7fc1f91fe749443ecc99654e2550ac7021"
+      },
+      "detection_latency_ms": 5031.94
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/database_credentials.conf",
+      "detection_wall_time": 1778973181.2726796,
+      "detection_perf_time": 37323.61722016,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: database_credentials.conf",
+        "deployed_at": 1778973165.094576,
+        "original_sha256": "a884c2456ebe206a1fbebbb4259da945147eb65d334ba70554ae43e4f31de4f7"
+      },
+      "detection_latency_ms": 5031.95
+    },
+    {
+      "module": "canary_deployer",
+      "event_type": "CANARY_MISSING",
+      "path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/.aws_credentials_old",
+      "detection_wall_time": 1778973181.2726872,
+      "detection_perf_time": 37323.617227543,
+      "severity": "CRITICAL",
+      "details": {
+        "reason": "Canary file DELETED: .aws_credentials_old",
+        "deployed_at": 1778973170.6666722,
+        "original_sha256": "d644e2ff8a7cfd657ca48d0e445446ec2b4b4540b9f5a7f3c64cc5bcbde2fd38"
+      },
+      "detection_latency_ms": 5031.95
+    }
+  ],
+  "report_path": "/home/amiclone/Downloads/anti_forensics_project/defense_framework/reports/shield_report_1778973176.json"
+}

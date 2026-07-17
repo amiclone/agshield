@@ -1,0 +1,212 @@
+# AntiGravity Shield — Default Configuration
+# ===========================================
+# This file configures the detection engine, monitoring paths,
+# canary deployment, log protection, and Wazuh integration.
+
+# ─── General Settings ───
+general:
+  # Directories to monitor (list of absolute paths)
+  watch_paths:
+    - "/home"
+    - "/tmp"
+    - "/var/log"
+    - "/opt"
+
+  # Reports directory
+  reports_dir: "/var/lib/antigravity/reports"
+
+  # Database path for file baseline
+  database_path: "/var/lib/antigravity/baseline.db"
+
+  # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  log_level: "INFO"
+
+  # Log file path
+  log_file: "/var/log/antigravity/shield.log"
+
+# ─── Real-Time Monitor ───
+realtime_monitor:
+  # Enable real-time file monitoring (inotify)
+  enabled: true
+
+  # Scan interval for baseline refresh (seconds)
+  scan_interval: 60
+
+  # File patterns to ignore
+  ignore_patterns:
+    - "*.pyc"
+    - "__pycache__"
+    - "*.swp"
+    - "*.tmp"
+    - ".git/*"
+
+  # Suspicious file extensions
+  suspicious_extensions:
+    - ".exe"
+    - ".bat"
+    - ".ps1"
+    - ".sh"
+    - ".dll"
+    - ".so"
+    - ".bin"
+
+# ─── Behavioral Detector ───
+behavioral_detector:
+  # Enable behavioral pattern analysis
+  enabled: true
+
+  # Sliding window size (seconds) for burst detection
+  burst_window_seconds: 1.0
+
+  # Operations per window to trigger burst alert
+  burst_threshold_ops: 4
+
+  # File lifespan threshold for ephemeral file detection (seconds)
+  ephemeral_threshold_seconds: 5.0
+
+  # Time window for wiper signature detection (seconds)
+  wiper_sequence_window: 2.0
+
+  # Rapid deletion threshold (files per window)
+  rapid_deletion_threshold: 3
+
+# ─── Timestamp Validator ───
+timestamp_validator:
+  # Enable timestamp anomaly detection
+  enabled: true
+
+  # Flag if mtime is older than this (days)
+  retro_date_threshold_days: 365
+
+  # Flag if mtime is in the future (seconds)
+  future_threshold_seconds: 300
+
+  # Flag if file differs from siblings by this many days
+  sibling_deviation_days: 180
+
+  # ctime/mtime drift threshold (seconds)
+  ctime_mtime_drift_seconds: 60
+
+# ─── Canary Deployer ───
+canary_deployer:
+  # Enable canary/honeypot file deployment
+  enabled: true
+
+  # Number of canary files per watched directory
+  default_count: 3
+
+  # Canary deployment interval (seconds) — 0 = deploy once at startup
+  redeploy_interval: 0
+
+# ─── Log Protector ───
+log_protector:
+  # Enable hash-chained audit logging
+  enabled: true
+
+  # Audit log path
+  audit_log_path: "/var/lib/antigravity/reports/shield_audit.log"
+
+  # Hash chain state path
+  chain_path: "/var/lib/antigravity/reports/hash_chain.json"
+
+  # External logs to monitor for tampering
+  external_logs:
+    - "/var/log/auth.log"
+    - "/var/log/syslog"
+    - "~/.bash_history"
+
+  # Check interval for external logs (seconds)
+  check_interval: 10
+
+# ─── Wazuh Integration ───
+wazuh_integration:
+  # Enable Wazuh integration
+  enabled: false
+
+  # Wazuh manager API URL
+  api_url: "https://localhost:55000"
+
+  # Wazuh API credentials
+  # IMPORTANT: Override these in /etc/antigravity/config.yaml — never commit real credentials.
+  # To use environment variables: set AGSHIELD_WAZUH_USER and AGSHIELD_WAZUH_PASSWORD
+  api_user: ""
+  api_password: ""
+
+  # Wazuh API verify SSL (recommend true in production)
+  api_verify_ssl: true
+
+  # Send alerts to Wazuh via API
+  send_to_wazuh: true
+
+  # Custom alert prefix for Wazuh
+  alert_prefix: "antigravity"
+
+  # Wazuh manager socket (for local agent mode)
+  # Set to empty string to disable socket output
+  socket_path: "/var/ossec/queue/sockets/queue"
+
+# ─── Alert Thresholds ───
+alerting:
+  # Auto-escalate severity if multiple rules fire
+  escalate_on_multi_rule: true
+
+  # Minimum severity to log (INFO, WARNING, CRITICAL)
+  min_severity: "INFO"
+
+  # Deduplicate alerts within this window (seconds)
+  dedup_window: 5.0
+
+# ─── Kernel Monitor ───
+kernel_monitor:
+  # Enable kernel-level monitoring (fanotify on Linux)
+  # Requires root/CAP_SYS_ADMIN. Falls back to watchdog if unavailable.
+  enabled: true
+
+  # Fallback to watchdog if kernel API unavailable
+  fallback_to_watchdog: true
+
+  # Event buffer size (bytes) for kernel event reading
+  event_buffer_size: 4096
+
+  # Process attribution: resolve PID for each file event
+  process_attribution: true
+
+# ─── Process Tracker ───
+process_tracker:
+  # Enable process context enrichment
+  enabled: true
+
+  # Cache TTL for process info lookups (seconds)
+  cache_ttl: 5.0
+
+  # Detect SSH-originated file operations
+  ssh_detection: true
+
+  # Max process tree depth to walk for SSH ancestry
+  ssh_ancestry_depth: 8
+
+# ─── Response Actions ───
+response_actions:
+  # Mode: "detect_only" (log alerts), "detect_respond" (active defense)
+  mode: "detect_only"
+
+  # Quarantine suspicious files (copies to quarantine dir before action)
+  quarantine_enabled: false
+  quarantine_dir: "/var/lib/antigravity/quarantine"
+
+  # Terminate attacker processes (requires root)
+  kill_attacker_process: false
+
+  # Snapshot forensic state on critical alert
+  forensic_snapshot: true
+
+# ─── Daemon Settings ───
+daemon:
+  # PID file path
+  pid_file: "/var/run/antigravity/shield.pid"
+
+  # User to drop privileges to (empty = current user)
+  run_as_user: ""
+
+  # Group to drop privileges to (empty = current group)
+  run_as_group: ""

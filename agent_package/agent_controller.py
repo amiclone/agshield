@@ -1,7 +1,6 @@
 import os
 import time
 import json
-import platform
 import timestomper
 import data_wiper
 import log_cleaner
@@ -9,7 +8,6 @@ import log_cleaner
 REPORT_FILE = "operation_report.json"
 EVIDENCE_FILE = "stolen_plans.txt"
 DROPPER_FILE = "malware_dropper.exe"
-EVIDENCE_FILE = "stolen_plans.txt"
 
 def generate_activity():
     """Creates some dummy files to simulate 'activity'."""
@@ -54,6 +52,10 @@ def run_cleanup():
         print(f"[*] Waiting {delay} seconds before cleanup phase (simulating delayed forensics response)...")
         time.sleep(delay)
         
+    # Record the first anti-forensic action boundary for defensible latency measurement.
+    report["cleanup_start_wall_time"] = time.time()
+    report["cleanup_start_perf_time"] = time.perf_counter()
+
     # Start high-precision timer for the actual cleanup actions
     start_time = time.perf_counter()
 

@@ -1,0 +1,20 @@
+{
+  "/home/amiclone/Downloads/anti_forensics_project/antigravity-shield/src/agshield/test_workspace/bitcoin_wallet.dat.bak": {
+    "sha256": "476dcc7da55865d6655aa1c1a278fb7fc1f91fe749443ecc99654e2550ac7021",
+    "deployed_at": 1783561484.9609675,
+    "template_name": "bitcoin_wallet.dat.bak",
+    "size": 97
+  },
+  "/home/amiclone/Downloads/anti_forensics_project/antigravity-shield/src/agshield/test_workspace/passwords_backup.txt": {
+    "sha256": "1081ad390213f3e4bc22759c05f2c5d80730f0ea5157cff131bf4b15fae15e9b",
+    "deployed_at": 1783561414.3762872,
+    "template_name": "passwords_backup.txt",
+    "size": 109
+  },
+  "/home/amiclone/Downloads/anti_forensics_project/antigravity-shield/src/agshield/test_workspace/employee_ssn_list.xlsx.bak": {
+    "sha256": "851cdad3eaf675976a2d8aaaabf020e4c94477a0bd75b8c43f4cd0ce400ada75",
+    "deployed_at": 1783561484.961052,
+    "template_name": "employee_ssn_list.xlsx.bak",
+    "size": 118
+  }
+}

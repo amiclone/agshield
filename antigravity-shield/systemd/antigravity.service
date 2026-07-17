@@ -1,0 +1,31 @@
+[Unit]
+Description=AntiGravity Shield — Real-time AI Anti-Forensic Detection
+Documentation=https://github.com/your-org/antigravity-shield
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/antigravity/shield.pid
+ExecStart=/usr/local/bin/antigravity start --daemonize --config /etc/antigravity/config.yaml
+ExecStop=/usr/local/bin/antigravity stop
+ExecReload=/bin/kill -HUP $MAINPID
+
+# Security hardening
+User=antigravity
+Group=antigravity
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/antigravity /var/log/antigravity /var/run/antigravity
+
+# Restart policy
+Restart=on-failure
+RestartSec=5
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=antigravity
+
+[Install]
+WantedBy=multi-user.target

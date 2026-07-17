@@ -1,0 +1,25 @@
+{
+    "actions": [
+        {
+            "tool": "timestomper",
+            "target": "malware_dropper.exe",
+            "status": "success",
+            "technique": "Backdating"
+        },
+        {
+            "tool": "wiper",
+            "target": "stolen_plans.txt",
+            "status": "success",
+            "technique": "Overwriting+Renaming"
+        },
+        {
+            "tool": "log_cleaner",
+            "status": "attempted"
+        }
+    ],
+    "cleanup_start_wall_time": 1784213612.2198155,
+    "cleanup_start_perf_time": 6794.4870064,
+    "execution_time_seconds": 7.9453,
+    "delay_seconds": 0,
+    "mode": "stealth"
+}

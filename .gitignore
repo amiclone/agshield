@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+.vscode/
+*.tmp
+~$*
+.~lock.*
+anti_forensics_project (2)/
+project/
+project guide  /
+uploaded_image_*.png

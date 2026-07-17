@@ -1,0 +1,27 @@
+<!-- AntiGravity Shield — Wazuh Decoder -->
+<!-- Parses AntiGravity Shield alert format from the local log -->
+
+<decoder name="antigravity">
+    <program_name>antigravity-shield</program_name>
+</decoder>
+
+<decoder name="antigravity-alert">
+    <parent>antigravity</parent>
+    <type>json</type>
+    <json_config>
+        <field name="timestamp">timestamp</field>
+        <field name="rule">rule</field>
+        <field name="rule.id">rule.id</field>
+        <field name="rule.level">rule.level</field>
+        <field name="rule.description">rule.description</field>
+        <field name="agent">agent</field>
+        <field name="agent.id">agent.id</field>
+        <field name="agent.name">agent.name</field>
+        <field name="full_log">full_log</field>
+        <field name="decoder">decoder</field>
+        <field name="location">location</field>
+        <field name="syscheck">syscheck</field>
+        <field name="syscheck.path">syscheck.path</field>
+        <field name="syscheck.event">syscheck.event</field>
+    </json_config>
+</decoder>

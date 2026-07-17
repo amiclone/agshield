@@ -1,0 +1,17 @@
+{
+    "actions": [
+        {
+            "tool": "timestomper",
+            "status": "skipped_noisy"
+        },
+        {
+            "tool": "standard_delete",
+            "target": "stolen_plans.txt",
+            "status": "success"
+        },
+        {
+            "tool": "log_cleaner",
+            "status": "skipped_noisy"
+        }
+    ]
+}

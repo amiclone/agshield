@@ -1,0 +1,50 @@
+{
+  "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/vpn_config_backup.ovpn": {
+    "sha256": "663e62b1b1e4d6ac13e83f22c50e61fb010f5001a24d550b79ad4c994671b048",
+    "deployed_at": 1783530230.5695982,
+    "template_name": "vpn_config_backup.ovpn",
+    "size": 154
+  },
+  "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/passwords_backup.txt": {
+    "sha256": "1081ad390213f3e4bc22759c05f2c5d80730f0ea5157cff131bf4b15fae15e9b",
+    "deployed_at": 1783530180.1536677,
+    "template_name": "passwords_backup.txt",
+    "size": 109
+  },
+  "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/ssh_private_key.bak": {
+    "sha256": "993c21e642aaec80aa850cf0477b48a6323642cc2c26c687886ef83b417f2e67",
+    "deployed_at": 1783530213.7659838,
+    "template_name": "ssh_private_key.bak",
+    "size": 180
+  },
+  "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/financial_report_Q4_CONFIDENTIAL.csv": {
+    "sha256": "11dd6d7635724aaf3d04fff000171d6d028ffea70ac83fae869583a3c3750b1f",
+    "deployed_at": 1783530219.3669193,
+    "template_name": "financial_report_Q4_CONFIDENTIAL.csv",
+    "size": 163
+  },
+  "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/employee_ssn_list.xlsx.bak": {
+    "sha256": "851cdad3eaf675976a2d8aaaabf020e4c94477a0bd75b8c43f4cd0ce400ada75",
+    "deployed_at": 1783530208.1612053,
+    "template_name": "employee_ssn_list.xlsx.bak",
+    "size": 118
+  },
+  "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/bitcoin_wallet.dat.bak": {
+    "sha256": "476dcc7da55865d6655aa1c1a278fb7fc1f91fe749443ecc99654e2550ac7021",
+    "deployed_at": 1783530224.968667,
+    "template_name": "bitcoin_wallet.dat.bak",
+    "size": 97
+  },
+  "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/database_credentials.conf": {
+    "sha256": "a884c2456ebe206a1fbebbb4259da945147eb65d334ba70554ae43e4f31de4f7",
+    "deployed_at": 1783530230.5696807,
+    "template_name": "database_credentials.conf",
+    "size": 115
+  },
+  "/home/amiclone/Downloads/anti_forensics_project/defense_framework/test_workspace/.aws_credentials_old": {
+    "sha256": "d644e2ff8a7cfd657ca48d0e445446ec2b4b4540b9f5a7f3c64cc5bcbde2fd38",
+    "deployed_at": 1783530224.9685848,
+    "template_name": ".aws_credentials_old",
+    "size": 135
+  }
+}

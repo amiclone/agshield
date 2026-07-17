@@ -1,0 +1,23 @@
+{
+    "actions": [
+        {
+            "tool": "timestomper",
+            "target": "malware_dropper.exe",
+            "status": "success",
+            "technique": "Backdating"
+        },
+        {
+            "tool": "wiper",
+            "target": "stolen_plans.txt",
+            "status": "success",
+            "technique": "Overwriting+Renaming"
+        },
+        {
+            "tool": "log_cleaner",
+            "status": "attempted"
+        }
+    ],
+    "execution_time_seconds": 0.3134,
+    "delay_seconds": 0,
+    "mode": "stealth"
+}

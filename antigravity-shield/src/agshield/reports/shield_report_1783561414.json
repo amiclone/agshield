@@ -1,0 +1,34 @@
+{
+  "framework": "AntiGravity Shield",
+  "version": "1.0.0",
+  "start_time": 1783561414.3760326,
+  "end_time": 1783561416.9175334,
+  "duration_seconds": 2.5415,
+  "watched_paths": [
+    "/home/amiclone/Downloads/anti_forensics_project/antigravity-shield/src/agshield/test_workspace"
+  ],
+  "summary": {
+    "total_alerts": 0,
+    "by_severity": {},
+    "by_module": {},
+    "by_event_type": {}
+  },
+  "log_integrity": {
+    "valid": true,
+    "entries_checked": 0,
+    "error": null
+  },
+  "behavioral_stats": {
+    "total_events": 0,
+    "burst_alerts": 0,
+    "wiper_alerts": 0,
+    "ephemeral_alerts": 0,
+    "mass_deletion_alerts": 0
+  },
+  "canary_status": {
+    "deployed": 2,
+    "final_verification": "passed"
+  },
+  "alerts": [],
+  "report_path": "/home/amiclone/Downloads/anti_forensics_project/antigravity-shield/src/agshield/reports/shield_report_1783561414.json"
+}
