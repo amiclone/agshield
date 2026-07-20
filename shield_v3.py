@@ -854,20 +854,26 @@ def main():
             sp(f"  {Y}[SKIP]{X} {d}: {e}")
 
     # Start Layer 8: MetadataScanner (catches timestomps, wipes, moves)
+    sp(f"    {G}✓{X} Metadata Scanner (150ms poll — timestomps, wipes, moves)")
+    sp(f"")
+    sp(f"  {G}{BOLD}SHIELD v4.0 ACTIVE — {len(observers)} monitors + Layer 8 scanner running{X}")
+    sp(f"  {DIM}  Ctrl+C to stop | Type 'approve/deny <id>' for response actions{X}")
+    sp(f"  {'='*60}\n")
+
+    # Build baseline silently (don't alert on pre-existing files)
+    _suppress = [True]
+    def _silent_alert(sev, etype, path, reason):
+        if not _suppress[0]:
+            detector._alert(sev, etype, path, reason)
     scanner = MetadataScanner(
         watch_dirs=watch_dirs,
-        alert_cb=lambda sev, etype, path, reason: detector._alert(sev, etype, path, reason),
+        alert_cb=_silent_alert,
         canary=canary,
         interval=0.2
     )
     scanner.build_baseline()
+    _suppress[0] = False
     scanner.start()
-    sp(f"    {G}✓{X} Metadata Scanner (150ms poll — timestomps, wipes, moves)")
-    sp(f"")
-
-    sp(f"  {G}{BOLD}SHIELD v4.0 ACTIVE — {len(observers)} monitors + Layer 8 scanner running{X}")
-    sp(f"  {DIM}  Ctrl+C to stop | Type 'approve/deny <id>' for response actions{X}")
-    sp(f"  {'='*60}\n")
 
     last_hb = time.time()
     try:
