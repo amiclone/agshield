@@ -153,21 +153,25 @@ class RandomisedTrialRunner:
             targets = random.sample(files, min(random.randint(1, 3), len(files)))
             for fp in targets:
                 if os.path.exists(fp):
-                    with open(fp, "a") as f:
-                        f.write(f"\n# Modified at {time.time()}\n")
-                    affected.append(("edit", fp))
+                    try:
+                        with open(fp, "a") as f:
+                            f.write(f"\n# Modified at {time.time()}\n")
+                        affected.append(("edit", fp))
+                    except (PermissionError, OSError): pass
             random_micro_delay()
 
         elif op == "wipe":
             targets = random.sample(files, min(random.randint(1, 3), len(files)))
             for fp in targets:
                 if os.path.exists(fp):
-                    sz = os.path.getsize(fp)
-                    passes = random.randint(1, 3)
-                    for _ in range(passes):
-                        with open(fp, "wb") as f:
-                            f.write(os.urandom(max(sz, 1)))
-                    affected.append(("wipe", fp))
+                    try:
+                        sz = os.path.getsize(fp)
+                        passes = random.randint(1, 3)
+                        for _ in range(passes):
+                            with open(fp, "wb") as f:
+                                f.write(os.urandom(max(sz, 1)))
+                        affected.append(("wipe", fp))
+                    except (PermissionError, OSError): pass
             random_micro_delay()
 
         elif op == "rename":
@@ -353,7 +357,7 @@ class RandomisedTrialRunner:
         detected_deletion = bool(event_types & {"FILE_DELETED", "EPHEMERAL_FILE"})
         detected_rename = "WIPER_RENAME" in event_types
         detected_canary = bool(event_types & {"CANARY_TAMPERED", "CANARY_MISSING"})
-        detected_move = "FILE_RENAMED" in event_types
+        detected_move = bool(event_types & {"FILE_RENAMED", "FILE_MOVED"})
         detected_edit = "FILE_MODIFIED" in event_types
 
         # Completeness = what % of PERFORMED operations were DETECTED

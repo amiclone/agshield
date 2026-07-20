@@ -510,15 +510,37 @@ class MetadataScanner(threading.Thread):
             current.update(self._scan_dir(d))
 
         with self._lock:
-            # Check files in baseline that changed or disappeared
+            # Collect disappeared files and new files for move detection
+            disappeared = {}  # {hash: (path, old_meta)}
+            appeared = {}     # {hash: (path, new_meta)}
+
             for fp, old in list(self._baseline.items()):
-                if fp not in current:
-                    # File disappeared
+                if fp not in current and old.get("hash"):
+                    disappeared[old["hash"]] = (fp, old)
+
+            for fp, new in current.items():
+                if fp not in self._baseline and new.get("hash"):
+                    appeared[new["hash"]] = (fp, new)
+
+            # Detect MOVES: same hash disappeared from A, appeared at B
+            moved_srcs = set()
+            moved_dsts = set()
+            for h in disappeared:
+                if h in appeared:
+                    src_path, src_meta = disappeared[h]
+                    dst_path, dst_meta = appeared[h]
+                    self.alert_cb("WARNING", "FILE_MOVED", src_path,
+                        f"Moved: {src_meta['name']} -> {os.path.basename(dst_path)}")
+                    moved_srcs.add(src_path)
+                    moved_dsts.add(dst_path)
+
+            # Now handle remaining disappeared files (not moves)
+            for fp, old in list(self._baseline.items()):
+                if fp not in current and fp not in moved_srcs:
                     if self.canary and self.canary.is_canary(fp):
                         self.alert_cb("CRITICAL", "CANARY_MISSING", fp,
                             f"Canary file DELETED: {old['name']}")
                     else:
-                        # Check if it was short-lived
                         age = time.time() - old.get("ctime", 0)
                         if age < 10:
                             self.alert_cb("CRITICAL", "EPHEMERAL_FILE", fp,
@@ -526,40 +548,43 @@ class MetadataScanner(threading.Thread):
                         else:
                             self.alert_cb("WARNING", "FILE_DELETED", fp,
                                 f"Deleted: {old['name']}")
-                    continue
 
-                new = current[fp]
+            # Check existing files for changes (timestomping, wipes, canary tamper)
+            for fp in self._baseline:
+                if fp in current and fp not in moved_srcs:
+                    old = self._baseline[fp]
+                    new = current[fp]
 
-                # Timestomping: mtime moved backwards significantly
-                if old["mtime"] - new["mtime"] > 86400 * 30:  # jumped >30 days into past
-                    self.alert_cb("CRITICAL", "TIMESTOMPING_DETECTED", fp,
-                        f"mtime jumped backwards by {(old['mtime']-new['mtime'])/86400:.0f} days")
+                    # Timestomping: mtime moved backwards significantly
+                    if old["mtime"] - new["mtime"] > 86400 * 30:
+                        self.alert_cb("CRITICAL", "TIMESTOMPING_DETECTED", fp,
+                            f"mtime jumped backwards by {(old['mtime']-new['mtime'])/86400:.0f} days")
 
-                # Also check mtime vs ctime divergence
-                now = time.time()
-                mtime_age = (now - new["mtime"]) / 86400
-                ctime_age = (now - new["ctime"]) / 86400
-                if mtime_age > 30 and ctime_age < 1 and old.get("_ts_flagged") != True:
-                    self.alert_cb("CRITICAL", "TIMESTOMPING_DETECTED", fp,
-                        f"mtime={mtime_age:.0f}d old but ctime={ctime_age:.1f}d old")
-                    new["_ts_flagged"] = True
+                    # mtime vs ctime divergence
+                    now = time.time()
+                    mtime_age = (now - new["mtime"]) / 86400
+                    ctime_age = (now - new["ctime"]) / 86400
+                    if mtime_age > 30 and ctime_age < 1 and old.get("_ts_flagged") != True:
+                        self.alert_cb("CRITICAL", "TIMESTOMPING_DETECTED", fp,
+                            f"mtime={mtime_age:.0f}d old but ctime={ctime_age:.1f}d old")
+                        new["_ts_flagged"] = True
 
-                # Same-size wipe: hash changed but size identical
-                if (new["hash"] and old["hash"] and
-                    new["hash"] != old["hash"] and
-                    new["size"] == old["size"] and new["size"] > 0):
-                    self.alert_cb("CRITICAL", "WIPE_DETECTED", fp,
-                        f"Same-size overwrite: {old['hash'][:12]}->{new['hash'][:12]}")
+                    # Same-size wipe
+                    if (new["hash"] and old["hash"] and
+                        new["hash"] != old["hash"] and
+                        new["size"] == old["size"] and new["size"] > 0):
+                        self.alert_cb("CRITICAL", "WIPE_DETECTED", fp,
+                            f"Same-size overwrite: {old['hash'][:12]}->{new['hash'][:12]}")
 
-                # Canary tampered
-                if self.canary and self.canary.is_canary(fp):
-                    if new["hash"] and old["hash"] and new["hash"] != old["hash"]:
-                        self.alert_cb("CRITICAL", "CANARY_TAMPERED", fp,
-                            f"Canary modified: {old['name']}")
+                    # Canary tampered
+                    if self.canary and self.canary.is_canary(fp):
+                        if new["hash"] and old["hash"] and new["hash"] != old["hash"]:
+                            self.alert_cb("CRITICAL", "CANARY_TAMPERED", fp,
+                                f"Canary modified: {old['name']}")
 
-            # Check for new files with suspicious names (wiper renames)
+            # Check for new files with suspicious names (exclude moves)
             for fp, new in current.items():
-                if fp not in self._baseline:
+                if fp not in self._baseline and fp not in moved_dsts:
                     fn = new["name"]
                     _, ext = os.path.splitext(fn)
                     if (not ext and len(fn) > 8 and
