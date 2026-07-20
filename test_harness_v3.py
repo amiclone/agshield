@@ -299,6 +299,23 @@ class RandomisedTrialRunner:
             affected = self._execute_operation(op, files, dirs)
             all_affected.extend(affected)
 
+        # Attack canary files — randomly tamper or delete 1-2 canaries
+        canary_files = [fp for fp in canary.registry.keys() if os.path.exists(fp)]
+        if canary_files:
+            targets = random.sample(canary_files, min(random.randint(1, 2), len(canary_files)))
+            for fp in targets:
+                try:
+                    action = random.choice(["delete", "tamper"])
+                    if action == "delete":
+                        os.remove(fp)
+                        all_affected.append(("canary_attack", fp))
+                    else:
+                        with open(fp, "w") as f:
+                            f.write("COMPROMISED BY ATTACKER\n")
+                        all_affected.append(("canary_attack", fp))
+                except: pass
+            random_micro_delay()
+
         # Final cleanup — delete any remaining files
         for fp in list(files):
             if os.path.exists(fp):

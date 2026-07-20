@@ -174,7 +174,7 @@ def analyze(results_path):
     mwu_completeness = mann_whitney_u(completeness, control_completeness)
 
     # ─── Detection Rates ───
-    categories = ["timestomp", "wipe", "deletion", "wiper_rename", "canary"]
+    categories = ["timestomp", "wipe", "deletion", "wiper_rename", "canary", "move", "edit"]
     detection_rates = {}
     for cat in categories:
         rate = sum(1 for t in trials if t["detection"]["categories"].get(cat, False)) / len(trials) * 100
@@ -306,7 +306,7 @@ def analyze(results_path):
     # Write report
     report_text = "\n".join(report_lines)
     report_path = os.path.join(os.path.dirname(results_path), "dissertation_results.md")
-    with open(report_path, "w") as f:
+    with open(report_path, "w", encoding="utf-8") as f:
         f.write(report_text)
 
     # Also save structured stats as JSON
