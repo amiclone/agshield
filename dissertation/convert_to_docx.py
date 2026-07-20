@@ -164,6 +164,7 @@ if __name__ == '__main__':
         'Chapter_1_Introduction.md',
         'Chapter_2_Literature_Review.md',
         'Chapter_3_Methodology.md',
+        'Chapter_4_Implementation.md',
     ]
     
     print("\n  📄 Converting dissertation files to Word (.docx)...\n")
