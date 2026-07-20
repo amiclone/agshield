@@ -3,7 +3,8 @@ AntiGravity Shield v3.0 — AI-Powered Anti-Forensic Defense
 ============================================================
 Layers: Process Attribution | Attack Chain Correlation |
         AI Anomaly Engine | Human-in-the-Loop Response |
-        SIEM Integration | Forensic Timeline | Windows Service
+        SIEM Integration | Forensic Timeline | Canary |
+        Metadata Scanner (hybrid event+poll)
 """
 import os, sys, time, math, hashlib, string, shutil, json, threading, socket, logging
 from datetime import datetime
@@ -441,6 +442,136 @@ class CanaryDeployer:
         self.registry = {}; self._save()
 
 # ═══════════════════════════════════════════════════════════
+# LAYER 8: High-Frequency Metadata Scanner
+# ═══════════════════════════════════════════════════════════
+class MetadataScanner(threading.Thread):
+    """
+    Polls all files in watched dirs at 200ms intervals.
+    Catches what watchdog misses: timestomping (os.utime),
+    same-size wipes, canary deletions, and silent renames.
+    """
+    def __init__(self, watch_dirs, alert_cb, canary=None, interval=0.2):
+        super().__init__(daemon=True)
+        self.watch_dirs = watch_dirs
+        self.alert_cb = alert_cb  # function(severity, event_type, path, reason)
+        self.canary = canary
+        self.interval = interval
+        self._stop_event = threading.Event()
+        self._baseline = {}  # {filepath: {mtime, ctime, size, hash}}
+        self._lock = threading.Lock()
+
+    def stop(self):
+        self._stop_event.set()
+
+    def _hash_file(self, path):
+        try:
+            with open(path, "rb") as f: return hashlib.sha256(f.read(65536)).hexdigest()
+        except: return None
+
+    def _scan_dir(self, d):
+        """Walk directory and return {path: {mtime, ctime, size, hash}}."""
+        snapshot = {}
+        try:
+            for root, dirs, files in os.walk(d):
+                for fn in files:
+                    fp = os.path.join(root, fn)
+                    try:
+                        st = os.stat(fp)
+                        snapshot[fp] = {
+                            "mtime": st.st_mtime,
+                            "ctime": st.st_ctime,
+                            "size": st.st_size,
+                            "hash": self._hash_file(fp),
+                            "name": fn,
+                        }
+                    except: pass
+        except: pass
+        return snapshot
+
+    def build_baseline(self):
+        """Take initial snapshot of all watched directories."""
+        for d in self.watch_dirs:
+            snap = self._scan_dir(d)
+            with self._lock:
+                self._baseline.update(snap)
+
+    def run(self):
+        while not self._stop_event.is_set():
+            self._stop_event.wait(self.interval)
+            if self._stop_event.is_set(): break
+            try:
+                self._check_cycle()
+            except: pass
+
+    def _check_cycle(self):
+        """One scan cycle: compare current state to baseline."""
+        current = {}
+        for d in self.watch_dirs:
+            current.update(self._scan_dir(d))
+
+        with self._lock:
+            # Check files in baseline that changed or disappeared
+            for fp, old in list(self._baseline.items()):
+                if fp not in current:
+                    # File disappeared
+                    if self.canary and self.canary.is_canary(fp):
+                        self.alert_cb("CRITICAL", "CANARY_MISSING", fp,
+                            f"Canary file DELETED: {old['name']}")
+                    else:
+                        # Check if it was short-lived
+                        age = time.time() - old.get("ctime", 0)
+                        if age < 10:
+                            self.alert_cb("CRITICAL", "EPHEMERAL_FILE", fp,
+                                f"File disappeared within {age:.1f}s")
+                        else:
+                            self.alert_cb("WARNING", "FILE_DELETED", fp,
+                                f"Deleted: {old['name']}")
+                    continue
+
+                new = current[fp]
+
+                # Timestomping: mtime moved backwards significantly
+                if old["mtime"] - new["mtime"] > 86400 * 30:  # jumped >30 days into past
+                    self.alert_cb("CRITICAL", "TIMESTOMPING_DETECTED", fp,
+                        f"mtime jumped backwards by {(old['mtime']-new['mtime'])/86400:.0f} days")
+
+                # Also check mtime vs ctime divergence
+                now = time.time()
+                mtime_age = (now - new["mtime"]) / 86400
+                ctime_age = (now - new["ctime"]) / 86400
+                if mtime_age > 30 and ctime_age < 1 and old.get("_ts_flagged") != True:
+                    self.alert_cb("CRITICAL", "TIMESTOMPING_DETECTED", fp,
+                        f"mtime={mtime_age:.0f}d old but ctime={ctime_age:.1f}d old")
+                    new["_ts_flagged"] = True
+
+                # Same-size wipe: hash changed but size identical
+                if (new["hash"] and old["hash"] and
+                    new["hash"] != old["hash"] and
+                    new["size"] == old["size"] and new["size"] > 0):
+                    self.alert_cb("CRITICAL", "WIPE_DETECTED", fp,
+                        f"Same-size overwrite: {old['hash'][:12]}->{new['hash'][:12]}")
+
+                # Canary tampered
+                if self.canary and self.canary.is_canary(fp):
+                    if new["hash"] and old["hash"] and new["hash"] != old["hash"]:
+                        self.alert_cb("CRITICAL", "CANARY_TAMPERED", fp,
+                            f"Canary modified: {old['name']}")
+
+            # Check for new files with suspicious names (wiper renames)
+            for fp, new in current.items():
+                if fp not in self._baseline:
+                    fn = new["name"]
+                    _, ext = os.path.splitext(fn)
+                    if (not ext and len(fn) > 8 and
+                        all(c in string.ascii_letters + string.digits for c in fn)):
+                        self.alert_cb("CRITICAL", "WIPER_RENAME", fp,
+                            f"Suspicious random filename: {fn}")
+
+            # Update baseline to current state
+            self._baseline = current
+
+
+# ═══════════════════════════════════════════════════════════
 # Windows Service Support
 # ═══════════════════════════════════════════════════════════
 def install_service():
@@ -448,7 +579,6 @@ def install_service():
     script = os.path.abspath(__file__)
     python = sys.executable
     task_name = "AntiGravityShield"
-    # Create a wrapper batch file to avoid quoting issues
     bat_path = os.path.join(os.path.dirname(script), "shield_service.bat")
     with open(bat_path, "w") as f:
         f.write(f'@echo off\n"{python}" "{script}"\n')
