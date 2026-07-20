@@ -847,14 +847,25 @@ def main():
     for d in watch_dirs:
         try:
             obs = Observer()
-            rec = (d != home)
-            obs.schedule(detector, d, recursive=rec)
+            obs.schedule(detector, d, recursive=True)
             obs.start()
             observers[d] = obs
         except Exception as e:
             sp(f"  {Y}[SKIP]{X} {d}: {e}")
 
-    sp(f"  {G}{BOLD}SHIELD v3.0 ACTIVE — {len(observers)} monitors running{X}")
+    # Start Layer 8: MetadataScanner (catches timestomps, wipes, moves)
+    scanner = MetadataScanner(
+        watch_dirs=watch_dirs,
+        alert_cb=lambda sev, etype, path, reason: detector._alert(sev, etype, path, reason),
+        canary=canary,
+        interval=0.2
+    )
+    scanner.build_baseline()
+    scanner.start()
+    sp(f"    {G}✓{X} Metadata Scanner (150ms poll — timestomps, wipes, moves)")
+    sp(f"")
+
+    sp(f"  {G}{BOLD}SHIELD v3.0 ACTIVE — {len(observers)} monitors + Layer 8 scanner running{X}")
     sp(f"  {DIM}  Ctrl+C to stop | Type 'approve/deny <id>' for response actions{X}")
     sp(f"  {'='*60}\n")
 
@@ -897,6 +908,8 @@ def main():
         pass
 
     sp(f"\n  {Y}Stopping...{X}")
+    scanner.stop()
+    scanner.join(timeout=2)
     for obs in observers.values():
         try: obs.stop(); obs.join(timeout=3)
         except: pass
