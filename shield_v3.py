@@ -1,5 +1,5 @@
 """
-AntiGravity Shield v3.0 — AI-Powered Anti-Forensic Defense
+AntiGravity Shield v4.0 — AI-Powered Anti-Forensic Defense
 ============================================================
 Layers: Process Attribution | Attack Chain Correlation |
         AI Anomaly Engine | Human-in-the-Loop Response |
@@ -294,7 +294,7 @@ class SIEMConnector:
         pid = event.get("pid",0)
         proc = event.get("process","unknown")
         ts = event.get("time", datetime.now().strftime("%H:%M:%S"))
-        cef = (f"CEF:0|AntiGravity|Shield|3.0|{etype}|{etype}|{sev}|"
+        cef = (f"CEF:0|AntiGravity|Shield|4.0|{etype}|{etype}|{sev}|"
                f"filePath={path} reason={reason} pid={pid} process={proc} "
                f"rt={ts}")
         # Send via UDP syslog if configured
@@ -811,7 +811,7 @@ def main():
    / _ \\ |  \\| | | |  | || |  _| |_) |  / _ \\ \\ / / | |  | |  \\ V /
   / ___ \\| |\\  | | |  | || |_| |  _ <  / ___ \\ V /  | |  | |   | |
  /_/   \\_\\_| \\_| |_| |___|\\____|_| \\_\\/_/   \\_\\_/  |___| |_|   |_|
-  {C}S H I E L D   v3.0   —   AI-POWERED{X}
+  {C}S H I E L D   v4.0   —   AI-POWERED{X}
   {DIM}Enterprise Anti-Forensic Defense Framework{X}
   {'='*60}
 {X}""")
@@ -865,7 +865,7 @@ def main():
     sp(f"    {G}✓{X} Metadata Scanner (150ms poll — timestomps, wipes, moves)")
     sp(f"")
 
-    sp(f"  {G}{BOLD}SHIELD v3.0 ACTIVE — {len(observers)} monitors + Layer 8 scanner running{X}")
+    sp(f"  {G}{BOLD}SHIELD v4.0 ACTIVE — {len(observers)} monitors + Layer 8 scanner running{X}")
     sp(f"  {DIM}  Ctrl+C to stop | Type 'approve/deny <id>' for response actions{X}")
     sp(f"  {'='*60}\n")
 
@@ -916,7 +916,7 @@ def main():
 
     # ── Final Report ──
     sp(f"\n  {'='*60}")
-    sp(f"  {G}{BOLD}SHIELD v3.0 SESSION REPORT{X}")
+    sp(f"  {G}{BOLD}SHIELD v4.0 SESSION REPORT{X}")
     sp(f"  {'='*60}")
     with detector.lock:
         sp(f"    {R}CRITICAL : {detector.counts.get('CRITICAL',0)}{X}")
