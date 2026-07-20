@@ -596,30 +596,7 @@ class MetadataScanner(threading.Thread):
             self._baseline = current
 
 
-# ═══════════════════════════════════════════════════════════
-# Windows Service Support
-# ═══════════════════════════════════════════════════════════
-def install_service():
-    """Install the shield as a Windows scheduled task (auto-start)."""
-    script = os.path.abspath(__file__)
-    python = sys.executable
-    task_name = "AntiGravityShield"
-    bat_path = os.path.join(os.path.dirname(script), "shield_service.bat")
-    with open(bat_path, "w") as f:
-        f.write(f'@echo off\n"{python}" "{script}"\n')
-    cmd = f'schtasks /create /tn "{task_name}" /tr "{bat_path}" /sc onlogon /rl highest /f'
-    sp(f"  {G}[SERVICE]{X} Installing as scheduled task...")
-    ret = os.system(cmd)
-    if ret == 0:
-        sp(f"  {G}[SERVICE]{X} Installed: {task_name} (runs on logon)")
-        sp(f"  {G}[SERVICE]{X} Wrapper: {bat_path}")
-    else:
-        sp(f"  {Y}[SERVICE]{X} Failed. Try running CMD as Administrator first.")
 
-def uninstall_service():
-    task_name = "AntiGravityShield"
-    os.system(f'schtasks /delete /tn "{task_name}" /f')
-    sp(f"  {Y}[SERVICE]{X} Removed: {task_name}")
 
 # ═══════════════════════════════════════════════════════════
 # CORE: File System Detector
@@ -964,9 +941,4 @@ def main():
     input("  Press Enter to exit...")
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "--install":
-            install_service(); sys.exit(0)
-        elif sys.argv[1] == "--uninstall":
-            uninstall_service(); sys.exit(0)
     main()
